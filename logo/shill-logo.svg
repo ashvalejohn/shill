@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="7632 -1422 16 16">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #95989a;
+      }
+
+      .cls-2, .cls-3 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        font-size: 5px;
+        font-family: LucidaGrande-Bold, Lucida Grande;
+        font-weight: 700;
+      }
+    </style>
+  </defs>
+  <g id="Group_5" data-name="Group 5" transform="translate(1393 -1208)">
+    <path id="Path_1" data-name="Path 1" class="cls-1" d="M.8,0H15.185a.8.8,0,0,1,.8.8V15.2a.8.8,0,0,1-.8.8H.8a.8.8,0,0,1-.8-.8V.8A.8.8,0,0,1,.8,0Z" transform="translate(6239.016 -214)"/>
+    <text id="SHILL" class="cls-2" transform="translate(6239 -209.52)"><tspan x="0.877" y="5">SHILL</tspan></text>
+    <path id="Path_2" data-name="Path 2" class="cls-3" d="M5920.412-218.885c-.033-.015,0,2.614,0,2.614l3.183-1.319S5920.444-218.87,5920.412-218.885Z" transform="translate(322.951 11.194)"/>
+  </g>
+</svg>
