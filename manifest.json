@@ -1,17 +1,25 @@
 {
-  "manifest_version": 1,
+  "manifest_version": 2,
   "name": "Shill",
   "author": "ashvalejohn",
   "version": "0.0.1",
-  "default_locale": "em",
   "description": "A Chrome extension that displays product information listed in the description box of a YouTube video.",
-  "icons": {},
-  // Use page action because Shill should only be available on YouTube
+  "background": {
+    "scripts" : [
+      "shill.js"
+    ],
+    "persistent": false
+  },
+  "icons": {
+    "16": "logo/shill-logo-active-16.png",
+    "24": "logo/shill-logo-active-24.png",
+    "32": "logo/shill-logo-active-32.png"
+  },
   "page_action": {
     "default_icon": {
-      "16": "logo/shill-logo-16.png",
-      "24": "logo/shill-logo-24.png",
-      "32": "logo/shill-logo-32.png"
+      "16": "logo/shill-logo-active-16.png",
+      "24": "logo/shill-logo-active-24.png",
+      "32": "logo/shill-logo-active-32.png"
     },
     "default_title": "Display products from the description box."
   },
