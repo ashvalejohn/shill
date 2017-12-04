@@ -10,6 +10,11 @@
     ],
     "persistent": false
   },
+  "content_scripts": [
+    {
+      "js": ["shill.js"]
+    }
+  ],
   "icons": {
     "16": "logo/shill-logo-active-16.png",
     "24": "logo/shill-logo-active-24.png",
