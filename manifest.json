@@ -6,12 +6,14 @@
   "description": "A Chrome extension that displays product information listed in the description box of a YouTube video.",
   "background": {
     "scripts" : [
-      "shill.js"
+      "background.js"
     ],
     "persistent": false
   },
   "content_scripts": [
     {
+      "run_at": "document_end",
+      "matches": ["https://www.youtube.com/*", "http://www.youtube.com/*"],
       "js": ["shill.js"]
     }
   ],
@@ -29,6 +31,9 @@
     "default_title": "Display products from the description box."
   },
   "permissions": [
-    "declarativeContent"
+    "declarativeContent",
+    "tabs",
+    "https://www.youtube.com/*",
+    "http://www.youtube.com/*"
   ]
 }
