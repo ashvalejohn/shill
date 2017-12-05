@@ -8,11 +8,12 @@ const sendUrls = setTimeout(() => {
     link.textContent
   ));
   return urls;
-}, 2000);
+}, 5000);
 
 // // STEP 3
 // Send URLs to background as message
-
+const port = chrome.runtime.connect({ name: "knockknock" });
+port.postMessage({ urls: [sendUrls] });
 
 // STEP 5
 // Display product cards

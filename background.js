@@ -19,3 +19,9 @@ chrome.runtime.onInstalled.addListener(function () {
 
 // STEP 4
 // Receive product link URLs, send AJAx request for og: tags
+chrome.runtime.onConnect.addListener(function (port) {
+  console.log(port.name);
+  port.onMessage.addListener(function (msg) {
+    console.log(msg);
+  });
+});
