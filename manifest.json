@@ -10,13 +10,6 @@
     ],
     "persistent": false
   },
-  "content_scripts": [
-    {
-      "run_at": "document_end",
-      "matches": ["https://www.youtube.com/*", "http://www.youtube.com/*"],
-      "js": ["shill.js"]
-    }
-  ],
   "icons": {
     "16": "logo/shill-logo-active-16.png",
     "24": "logo/shill-logo-active-24.png",
