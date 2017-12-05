@@ -33,7 +33,7 @@
   "permissions": [
     "declarativeContent",
     "tabs",
-    "https://www.youtube.com/*",
-    "http://www.youtube.com/*"
+    "http://*/",
+    "https://*/"
   ]
 }

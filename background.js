@@ -1,6 +1,5 @@
-
 // STEP 1
-// Check that user is on YouTube
+// Open extension if user is on a YouTube page
 chrome.runtime.onInstalled.addListener(function () {
   console.log("RUNNING background.js");
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
@@ -22,6 +21,7 @@ chrome.runtime.onInstalled.addListener(function () {
 chrome.runtime.onConnect.addListener(function (port) {
   console.log(port.name);
   port.onMessage.addListener(function (msg) {
-    console.log(msg);
+    console.log(msg.urls[8]);
+
   });
 });
