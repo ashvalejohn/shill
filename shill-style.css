@@ -11,6 +11,25 @@
   width: 30%;
 }
 
-.shill-card img{
-  width: 80%;
+.shill-card a{
+  text-decoration: none;
 }
+
+.shill-card-img{
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: block;
+  margin: 0 auto;
+  height: 200px;
+}
+
+.shill-title{
+  font-size: 1rem;
+}
+
+.shill-description{
+  height: 100px;
+  overflow: scroll;
+}
+
