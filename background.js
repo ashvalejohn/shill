@@ -38,7 +38,7 @@ chrome.runtime.onConnect.addListener(function(port) {
         if (req.readyState === XMLHttpRequest.DONE && req.status === 200) {
           const doc = req.response;
           if (doc) {
-            let ogInfo = [];
+            let metaTags = [];
             const meta = doc.querySelectorAll('meta');
             meta.forEach((tag) => {
               if (tag.hasAttribute("property")) {
@@ -47,11 +47,14 @@ chrome.runtime.onConnect.addListener(function(port) {
                 attrs.map((attr) => {
                   props[attr.name] = attr.value;
                 });
-                ogInfo.push(props);
+                metaTags.push(props);
               }
             });
-            if (ogInfo.length > 0) {
-              port.postMessage({ card: ogInfo })
+
+            // STEP 5
+            // Send cardInfo to content_script
+            if (metaTags.length > 0) {
+              port.postMessage({ metaTags })
             }
           }
         }
@@ -60,6 +63,3 @@ chrome.runtime.onConnect.addListener(function(port) {
     });
   });
 });
-
-// STEP 5
-// Send cardInfo to content_script
