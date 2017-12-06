@@ -1,7 +1,16 @@
+#shill-cards{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
 .shill-card{
-  border: 1px solid pink;
+  border: 1px solid gray;
+  padding: 5px;
+  width: 30%;
 }
 
 .shill-card img{
-  width: 30px;
+  width: 80%;
 }

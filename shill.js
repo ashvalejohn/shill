@@ -1,7 +1,7 @@
 console.log("RUN shill.js");
 const port = chrome.runtime.connect({name: 'shill'})
 const desc = document.getElementById("description");
-// const shillStyle = chrome.runtime.getURL;
+desc.insertAdjacentHTML('afterbegin', "<div id='shill-cards'></div>");
 document.querySelector('head').insertAdjacentHTML('afterbegin', `<link rel='stylesheet' type='text/css' href='${chrome.runtime.getURL("shill-style.css")}'>`);
 
 // STEP 2
@@ -14,7 +14,6 @@ if(links){
   console.log("shill.js grabbed links from description");
 }
 
-
 // STEP 3
 // Send URLs to background as message
 port.postMessage({ urls: links });
@@ -24,7 +23,6 @@ port.postMessage({ urls: links });
 port.onMessage.addListener((card) => {
   const cardInfo = {};
   const ogTags = card.metaTags.filter(attrs => attrs.property.includes('og:'));
-
   ogTags.forEach( tag => {
     if (tag.property === 'og:title') {
         cardInfo['title'] = tag.content;
@@ -35,7 +33,8 @@ port.onMessage.addListener((card) => {
     }
   });
 
-  desc.insertAdjacentHTML('afterbegin', `<div class='shill-card'><img src='${cardInfo.imgSrc}'<h1>${cardInfo.title}</h1><p>${cardInfo.description}</p></div>`);
+  const shillCards = document.getElementById('shill-cards');
+  shillCards.insertAdjacentHTML('afterbegin', `<div class='shill-card'><a href='${card.url}' target='_blank'><img src='${cardInfo.imgSrc}'/></a><a href='${card.url}'><h1>${cardInfo.title}</h1></a><p>${cardInfo.description}</p></div>`);
 });
 
 

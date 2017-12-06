@@ -15,7 +15,6 @@ const onYouTube = [
   }
 ];
 
-
 chrome.runtime.onInstalled.addListener(function () {
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
     chrome.declarativeContent.onPageChanged.addRules(onYouTube);
@@ -54,7 +53,7 @@ chrome.runtime.onConnect.addListener(function(port) {
             // STEP 5
             // Send cardInfo to content_script
             if (metaTags.length > 0) {
-              port.postMessage({ metaTags })
+              port.postMessage({ url, metaTags })
             }
           }
         }
