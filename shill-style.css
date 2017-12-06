@@ -2,13 +2,14 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .shill-card{
   border: 1px solid gray;
   padding: 5px;
-  width: 30%;
+  width: 250px;
+  margin: 10px 0;
 }
 
 .shill-card a{

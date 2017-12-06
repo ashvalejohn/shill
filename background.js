@@ -24,8 +24,6 @@ chrome.runtime.onInstalled.addListener(function () {
 // STEP 4
 // Receive product link URLs, send xhr request for og: tags
 chrome.runtime.onConnect.addListener(function(port) {
-  console.log(`Open port: ${port.name}`);
-  
   port.onMessage.addListener((msg) => {
     console.log(`Received ${msg.urls.length} links from shill.js`);
     
