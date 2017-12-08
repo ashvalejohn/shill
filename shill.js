@@ -13,6 +13,8 @@ function checkStatus(){
       fetchLinks();
     case "linksReceived":
       console.log("Background received links");
+    case "productInfoReceived":
+      console.log("Product info received");
     default:
       null;
   }
@@ -20,12 +22,11 @@ function checkStatus(){
 
 function fetchLinks(){
   const desc = document.getElementById("description");
+  const head = document.querySelector('head');
   desc.insertAdjacentHTML('afterbegin', "<div id='shill-cards'></div>");
-
-  document.querySelector('head').insertAdjacentHTML('afterbegin', `<link rel='stylesheet' type='text/css' href='${chrome.runtime.getURL("shill-style.css")}'>`);
+  head.insertAdjacentHTML('afterbegin', `<link rel='stylesheet' type='text/css' href='${chrome.runtime.getURL("shill-style.css")}'>`);
 
   const descLinks = Array.from(document.querySelectorAll("#description > a"));
-
   const links = descLinks.map(link => (
     link.textContent
   ));
@@ -36,6 +37,13 @@ function fetchLinks(){
   });
 }
 
+
+chrome.runtime.onMessage.addListener(
+  function (request, sender, sendResponse) {
+    if (request.cards)
+      sendResponse({ status: "cards received" });
+      console.log(request.cards);
+  });
 // // STEP 6
 // // Receive card information
 // port.onMessage.addListener((card) => {
