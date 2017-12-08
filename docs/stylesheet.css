@@ -48,6 +48,7 @@ main {
   align-items: center;
   justify-content: center;
   text-align: center;
+  margin-bottom: 10vh;
 }
 main section {
   padding: 5vh 0 0 0;
