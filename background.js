@@ -89,7 +89,7 @@ function fetchLinks(links) {
 
 function sendProductInfo(product) {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, { cards: product }, function (response) {
+    chrome.tabs.sendMessage(tabs[0].id, { card: product }, function (response) {
       console.log(response.status);
     });
   });

@@ -40,44 +40,50 @@ function fetchLinks(){
 
 chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
-    if (request.cards)
-      sendResponse({ status: "cards received" });
-      console.log(request.cards);
+    sendResponse({ status: "Content Script received cards" });
+    // console.log("******");
+    console.log(request.card);
+    const ogTags = request.card.filter((attrs) => attrs.property.includes("og:"));
+      
+    const cardInfo = {
+      description: '',
+      price: '',
+      currency: '',
+      type: '',
+    };
+
+    ogTags.forEach(tag => {
+      if (tag.property === 'og:title') {
+        if (tag.content !== undefined) {
+          cardInfo['title'] = tag.content;
+        }
+      } else if (tag.property === 'og:image') {
+        if (tag.content.slice(0, 4) === 'http') {
+          cardInfo['imgSrc'] = tag.content;
+        }
+      } else if (tag.property === 'og:description') {
+        if (tag.content !== undefined) {
+          cardInfo['description'] = tag.content;
+        }
+      } else if (tag.property === 'og:price:amount') {
+        cardInfo['price'] = tag.content;
+      } else if (tag.propery === 'og:price:currency') {
+        cardInfo['currency'] = tag.content;
+      } else if (tag.property === 'og:type') {
+        cardInfo['type'] === tag.content;
+      }
+    });
+    
+    const shillCards = document.getElementById('shill-cards');
+    const template = `<a class='shill-card' href='${request.card.url}' target='_blank' style="background-image: url('${cardInfo.imgSrc}')" alt='${cardInfo.title}'><div class='shill-info'><h1 class='shill-title'>${cardInfo.title}</h1></div></a>`;
+
+    if (cardInfo.imgSrc === undefined || cardInfo.imgSrc === '' ||cardInfo.type === "yt-fb-app:channel" || cardInfo.type === "profile" || cardInfo.title === "Pinterest") {
+      console.log('Card missing information, non-product');
+    }
+    else {
+      console.log(cardInfo);
+      shillCards.insertAdjacentHTML('afterbegin', template);
+    }
   });
-// // STEP 6
-// // Receive card information
-// port.onMessage.addListener((card) => {
-//   const cardInfo = {
-//     description: '',
-//   };
-
-//   const ogTags = card.metaTags.filter(attrs => attrs.property.includes('og:'));
-
-//   ogTags.forEach(tag => {
-//     if (tag.property === 'og:title') {
-//       if (tag.content !== undefined) {
-//         cardInfo['title'] = tag.content;
-//       }
-//     } else if (tag.property === 'og:image') {
-//       if (tag.content.slice(0, 4) === 'http') {
-//         cardInfo['imgSrc'] = tag.content;
-//       }
-//     } else if (tag.property === 'og:description') {
-//       if (tag.content !== undefined) {
-//         cardInfo['description'] = tag.content;
-//       }
-//     }
-//   });
-
-
-//   if (cardInfo.imgSrc === undefined || cardInfo.imgSrc === '') {
-//     console.log('Card missing information')
-//   } else {
-//     // STEP 7
-//     // Display product card
-//     const shillCards = document.getElementById('shill-cards');
-//     shillCards.insertAdjacentHTML('afterbegin', `<div class='shill-card'><a class='shill-card-img' href='${card.url}' target='_blank' style="background-image: url('${cardInfo.imgSrc}')" alt='${cardInfo.title}'></a><a href='${card.url}'><h1 class='shill-title'>${cardInfo.title}</h1></a><p class='shill-description'>${cardInfo.description}</p></div>`);
-//   }
-// });
 
 
