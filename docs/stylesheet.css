@@ -55,10 +55,21 @@ main .button {
   color: #fc0d1d;
   padding: 10px;
   transition-duration: .25s;
+  min-width: 80px;
+  text-align: center;
 }
 main .button:hover {
   background-color: #fc0d1d;
   transition-duration: .25s;
   color: white;
   cursor: pointer;
+}
+
+.cta-buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.cta-buttons :last-of-type {
+  margin-left: 15px;
 }
