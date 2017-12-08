@@ -1,31 +1,26 @@
 console.log("RUN shill.js");
 
-if (document.getElementById("description")){
-  chrome.runtime.sendMessage({ status: "descriptionLoaded" }, function (response) {
-    fetchLinks();
-  });
-}
+chrome.runtime.sendMessage({ status: "descriptionLoaded" }, function (response) {
+  renderCardsContainer(fetchLinks);
+});
 
-// Message Listeners
+
+// Listen for RELOAD and RENDER
 chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
     if (request.status === "reload") {
-      sendResponse({ status: "Content Script should reload"})
+      sendResponse({ status: "shill.js : calling reloadCards()"})
       reloadCards();
     } else {
-      sendResponse({ status: "Content Script received cards" });
+      sendResponse({ status: "shill.js : calling renderCards()" });
       renderCards(request);
     }
   }
 );
 
 function fetchLinks(){
-  console.log("fetching links");
-  const desc = document.getElementById("description");
-  const head = document.querySelector('head');
-  desc.insertAdjacentHTML('afterbegin', "<div id='shill-cards'></div>");
-  head.insertAdjacentHTML('afterbegin', `<link rel='stylesheet' type='text/css' href='${chrome.runtime.getURL("shill-style.css")}'>`);
-
+  console.log("Fetching links");
+  
   const descLinks = Array.from(document.querySelectorAll("#description > a"));
   const links = descLinks.map(link => (
     link.textContent
@@ -35,9 +30,20 @@ function fetchLinks(){
   });
 }
 
+function renderCardsContainer(fetchLinks){
+  console.log("Rendering cards container, there should only be one.")
+  const desc = document.getElementById("description");
+  desc.insertAdjacentHTML('afterbegin', "<div id='shill-cards'></div>");
+
+  const head = document.querySelector('head');
+  head.insertAdjacentHTML('afterbegin', `<link rel='stylesheet' type='text/css' href='${chrome.runtime.getURL("shill-style.css")}'>`);
+
+  fetchLinks();
+}
+
 function renderCards(request) {
   let renderedUrls = {};
-  if (renderedUrls[request.url] === undefined) {
+  if (renderedUrls[request.url] === undefined || renderedUrls[request.url] === false) {
     renderedUrls[request.url] = true;
     const ogTags = request.card.filter((attrs) => attrs.property.includes("og:"));
     const cardInfo = {
@@ -77,7 +83,7 @@ function renderCards(request) {
     // console.log("**********");
     // console.log(cardInfo);
     if (cardInfo.imgSrc === undefined || cardInfo.imgSrc === '' || cardInfo.type === "yt-fb-app:channel" || cardInfo.type === "profile" || cardInfo.title === "Pinterest" || cardInfo.title.includes("404") || cardInfo.url === undefined || cardInfo.url.includes("outube") || cardInfo.imgSrc.includes("stagram") || cardInfo.url.includes("acebook") || cardInfo.title === '' || cardInfo.url.includes("blog")) {
-      console.log('Card missing information, non-product');
+      // console.log('Card missing information, non-product');
     }
     else {
       // console.log(cardInfo);
@@ -85,19 +91,18 @@ function renderCards(request) {
     }
   } else {
     console.log("Link already on page");
+    console.log(renderedUrls);
   }
 }
 
 function reloadCards(fetchLinks) {
   console.log('RELOADING');
   const cards = document.getElementById('shill-cards');
-  if (cards) {
-    cards.innerHTML = '';
+  cards.innerHTML = '';
+
     if (cards.innerHTML = ''){
-      console.log('desc is empty, ready to fetch')
       chrome.runtime.sendMessage({ status: "descriptionLoaded" }, function (response) {
         fetchLinks();
       });
     }
   }
-}
