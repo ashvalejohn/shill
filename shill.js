@@ -1,8 +1,23 @@
 console.log("RUN shill.js");
 
-chrome.runtime.sendMessage({ status: "descriptionLoaded" }, function (response) {
-  fetchLinks();
-});
+if (document.getElementById("description")){
+  chrome.runtime.sendMessage({ status: "descriptionLoaded" }, function (response) {
+    fetchLinks();
+  });
+}
+
+// Message Listeners
+chrome.runtime.onMessage.addListener(
+  function (request, sender, sendResponse) {
+    if (request.status === "reload") {
+      sendResponse({ status: "Content Script should reload"})
+      reloadCards();
+    } else {
+      sendResponse({ status: "Content Script received cards" });
+      renderCards(request);
+    }
+  }
+);
 
 function fetchLinks(){
   console.log("fetching links");
@@ -19,19 +34,6 @@ function fetchLinks(){
   chrome.runtime.sendMessage({ links: links }, function (response) {
   });
 }
-
-// Message Listeners
-  chrome.runtime.onMessage.addListener(
-    function (request, sender, sendResponse) {
-      if (request.status === "reload") {
-        sendResponse({ status: "Content Script should reload"})
-        reloadCards();
-      } else {
-        sendResponse({ status: "Content Script received cards" });
-        renderCards(request);
-      }
-    }
-  );
 
 function renderCards(request) {
   let renderedUrls = {};
@@ -72,8 +74,8 @@ function renderCards(request) {
 
     const shillCards = document.getElementById('shill-cards');
     const template = `<a class='shill-card' href='${cardInfo.url}' target='_blank' style="background-image: url('${cardInfo.imgSrc}')" alt='${cardInfo.title}'><div class='shill-info'><h1 class='shill-title'>${cardInfo.title}</h1></div></a>`;
-    console.log("**********");
-    console.log(cardInfo);
+    // console.log("**********");
+    // console.log(cardInfo);
     if (cardInfo.imgSrc === undefined || cardInfo.imgSrc === '' || cardInfo.type === "yt-fb-app:channel" || cardInfo.type === "profile" || cardInfo.title === "Pinterest" || cardInfo.title.includes("404") || cardInfo.url === undefined || cardInfo.url.includes("outube") || cardInfo.imgSrc.includes("stagram") || cardInfo.url.includes("acebook") || cardInfo.title === '' || cardInfo.url.includes("blog")) {
       console.log('Card missing information, non-product');
     }
@@ -87,12 +89,15 @@ function renderCards(request) {
 }
 
 function reloadCards(fetchLinks) {
+  console.log('RELOADING');
   const cards = document.getElementById('shill-cards');
-  cards.innerHTML = '';
-  if (cards.innerHTML = ''){
-    console.log('desc is empty, ready to fetch')
-    chrome.runtime.sendMessage({ status: "descriptionLoaded" }, function (response) {
-      fetchLinks();
-    });
+  if (cards) {
+    cards.innerHTML = '';
+    if (cards.innerHTML = ''){
+      console.log('desc is empty, ready to fetch')
+      chrome.runtime.sendMessage({ status: "descriptionLoaded" }, function (response) {
+        fetchLinks();
+      });
+    }
   }
 }
