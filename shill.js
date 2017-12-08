@@ -37,52 +37,60 @@ function fetchLinks(){
   });
 }
 
+let renderedUrls = {};
+
 
 chrome.runtime.onMessage.addListener(
   function (request, sender, sendResponse) {
     sendResponse({ status: "Content Script received cards" });
-    // console.log("******");
-    console.log(request.card);
-    const ogTags = request.card.filter((attrs) => attrs.property.includes("og:"));
-      
-    const cardInfo = {
-      description: '',
-      price: '',
-      currency: '',
-      type: '',
-    };
+    if (renderedUrls[request.url] === undefined){
+      renderedUrls[request.url] = true;
+      const ogTags = request.card.filter((attrs) => attrs.property.includes("og:"));
+      const cardInfo = {
+        url: request.url,
+        title: '',
+        description: '',
+        price: '',
+        currency: '',
+        type: '',
+        imgSrc: ''
+      };
 
-    ogTags.forEach(tag => {
-      if (tag.property === 'og:title') {
-        if (tag.content !== undefined) {
-          cardInfo['title'] = tag.content;
+      ogTags.forEach(tag => {
+        if (tag.property === 'og:title') {
+          if (tag.content !== undefined) {
+            cardInfo['title'] = tag.content;
+          }
+        } else if (tag.property === 'og:image') {
+          if (tag.content.slice(0, 4) === 'http') {
+            cardInfo['imgSrc'] = tag.content;
+          }
+        } else if (tag.property === 'og:description') {
+          if (tag.content !== undefined) {
+            cardInfo['description'] = tag.content;
+          }
+        } else if (tag.property === 'og:price:amount') {
+          cardInfo['price'] = tag.content;
+        } else if (tag.propery === 'og:price:currency') {
+          cardInfo['currency'] = tag.content;
+        } else if (tag.property === 'og:type') {
+          cardInfo['type'] === tag.content;
         }
-      } else if (tag.property === 'og:image') {
-        if (tag.content.slice(0, 4) === 'http') {
-          cardInfo['imgSrc'] = tag.content;
-        }
-      } else if (tag.property === 'og:description') {
-        if (tag.content !== undefined) {
-          cardInfo['description'] = tag.content;
-        }
-      } else if (tag.property === 'og:price:amount') {
-        cardInfo['price'] = tag.content;
-      } else if (tag.propery === 'og:price:currency') {
-        cardInfo['currency'] = tag.content;
-      } else if (tag.property === 'og:type') {
-        cardInfo['type'] === tag.content;
-      }
-    });
-    
-    const shillCards = document.getElementById('shill-cards');
-    const template = `<a class='shill-card' href='${request.card.url}' target='_blank' style="background-image: url('${cardInfo.imgSrc}')" alt='${cardInfo.title}'><div class='shill-info'><h1 class='shill-title'>${cardInfo.title}</h1></div></a>`;
+      });
 
-    if (cardInfo.imgSrc === undefined || cardInfo.imgSrc === '' ||cardInfo.type === "yt-fb-app:channel" || cardInfo.type === "profile" || cardInfo.title === "Pinterest") {
-      console.log('Card missing information, non-product');
-    }
-    else {
+      const shillCards = document.getElementById('shill-cards');
+      const template = `<a class='shill-card' href='${cardInfo.url}' target='_blank' style="background-image: url('${cardInfo.imgSrc}')" alt='${cardInfo.title}'><div class='shill-info'><h1 class='shill-title'>${cardInfo.title}</h1></div></a>`;
+      console.log("**********");
       console.log(cardInfo);
-      shillCards.insertAdjacentHTML('afterbegin', template);
+      if (cardInfo.imgSrc === undefined || cardInfo.imgSrc === '' || cardInfo.type === "yt-fb-app:channel" || cardInfo.type === "profile" || cardInfo.title === "Pinterest" || cardInfo.title.includes("404") || cardInfo.url === undefined || cardInfo.url.includes("outube") || cardInfo.imgSrc.includes("stagram") || cardInfo.url.includes("acebook") || cardInfo.title === '' || cardInfo.url.includes("blog")) {
+        console.log('Card missing information, non-product');
+      }
+      else {
+        // console.log(cardInfo);
+        shillCards.insertAdjacentHTML('afterbegin', template);
+      }
+    } else {
+      console.log("Link already on page");
     }
   });
 

@@ -27,7 +27,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
     console.log("Request links");
     sendResponse({ status: "fetchLinks" });
   } else if (request.links){
-    console.log("Received links");
+    console.log(`Received ${request.links.length} links`);
     sendResponse({ status: "linksReceived" });
     fetchLinks(request.links);
   }
@@ -74,7 +74,7 @@ function getProductInfo(url, sendProductInfo){
       });
 
       if (product.length > 0){
-        sendProductInfo(product);
+        sendProductInfo(product, url);
       }
     }
   }
@@ -87,9 +87,9 @@ function fetchLinks(links) {
   });
 }
 
-function sendProductInfo(product) {
+function sendProductInfo(product, url) {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, { card: product }, function (response) {
+    chrome.tabs.sendMessage(tabs[0].id, { card: product, url: url }, function (response) {
       console.log(response.status);
     });
   });
