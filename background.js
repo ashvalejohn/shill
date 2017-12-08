@@ -33,54 +33,38 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
   }
 });
 
-function parseProductInfo(doc) {
-  console.log(doc.querySelectorAll('meta'));
-  // let metaTags = [];
-  // const meta = doc.querySelectorAll('meta');
-  // meta.forEach((tag) => {
-  //   if (tag.hasAttribute("property")) {
-  //     let props = {}
-  //     const attrs = Array.from(tag.attributes);
-  //     attrs.map((attr) => {
-  //       props[attr.name] = attr.value;
-  //     });
-  //     metaTags.push(props);
-  //   }
-}
-
-
 function checkForShortURL(url, getProductInfo) {
   let longUrl;
-  const req = new XMLHttpRequest();
-  req.open('HEAD', `${url}`, true);
-  req.send();
-  req.done = function () {
-    if (this.readyState === this.HEADERS_RECEIVED && req.getResponseHeader("Refresh")) {
-      const refresh = req.getResponseHeader("Refresh").split("URL=");
+  const xhr = new XMLHttpRequest();
+  xhr.open('HEAD', `${url}`, true);
+  xhr.send();
+  xhr.onreadystatechange = function () {
+    if (this.readyState === this.HEADERS_RECEIVED && xhr.getResponseHeader("Refresh")) {
+      const refresh = xhr.getResponseHeader("Refresh").split("URL=");
       const newUrl = refresh[1];
       // console.log(`HEAD request to ${url} successful. Send GET request to ${newUrl}.`);
       getProductInfo(newUrl);
-    } else if (req.status === 200) {
+    } else {
       // console.log(`HEAD request to ${url} failed. Send GET request instead.`);
       getProductInfo(url);
-    } else {
-      console.log(req.response);
     }
   }
   return longUrl;
 }
 
-function getProductInfo(url, parseProductInfo){
+function getProductInfo(url){
   const req = new XMLHttpRequest();
   req.open('GET', `${url}`, true);
-  req.response = "document";
+  req.responseType = "document";
   req.send();
-  req.done = function () {
-    if (req.status === 200) {
-      parseProductInfo(req.response);
+  req.onreadystatechange = function () {
+    if (req.response) {
+      console.log(req.response.querySelectorAll('meta'));
     }
   }
 }
+
+
 
 function fetchProductInfo(links) {
   let productInfo = [];
@@ -89,7 +73,6 @@ function fetchProductInfo(links) {
     let newUrl = checkForShortURL(link, getProductInfo);
   });
 }
-
 
 function sendProductInfo(info){
   // console.log(info);
