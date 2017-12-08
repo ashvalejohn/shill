@@ -3,14 +3,14 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
-  margin-left: -6vw;
+  margin-left: 0;
 }
 
 .shill-card{
   border: 1px solid gray;
   width: 100px;
   height: 100px;
-  margin: 10px 0;
+  margin: 10px 5px;
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
