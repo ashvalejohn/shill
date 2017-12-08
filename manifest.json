@@ -25,11 +25,14 @@
   },
   "permissions": [
     "declarativeContent",
+    "activeTab",
     "tabs",
     "http://*/",
-    "https://*/"
+    "https://*/",
+    "webNavigation"
   ],
   "web_accessible_resources": [
-    "shill-style.css"
+    "shill-style.css",
+    "shill.js"
   ]
 }

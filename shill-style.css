@@ -3,34 +3,38 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
+  margin-left: -6vw;
 }
 
 .shill-card{
   border: 1px solid gray;
-  padding: 5px;
-  width: 250px;
+  width: 100px;
+  height: 100px;
   margin: 10px 0;
-}
-
-.shill-card a{
-  text-decoration: none;
-}
-
-.shill-card-img{
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
   display: block;
-  margin: 0 auto;
-  height: 200px;
+  text-decoration: none;
+}
+
+.shill-card:hover .shill-info{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0,0,0,.5);
+  height: inherit;
+  color: white;
+  text-align: center;
+  
+}
+
+.shill-info{
+  display: none;
 }
 
 .shill-title{
-  font-size: 1rem;
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 1;
 }
-
-.shill-description{
-  height: 100px;
-  overflow: scroll;
-}
-
