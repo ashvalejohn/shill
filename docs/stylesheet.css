@@ -1,0 +1,64 @@
+body {
+  font-family: "Roboto", sans-serif;
+  padding: 0;
+  margin: 0;
+}
+body h1, body h2, body h3 {
+  margin: 0;
+}
+body a {
+  text-decoration: none;
+}
+
+.logo {
+  width: 8vw;
+  max-width: 500px;
+}
+
+header {
+  border-bottom: 2px solid black;
+  padding: 1vh 0;
+}
+header .header-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  width: 80vw;
+}
+header .tag-line {
+  margin-left: 5vw;
+}
+header h2 {
+  font-family: "Oswald", sans-serif;
+}
+header h3 {
+  font-weight: normal;
+}
+header a {
+  text-decoration: none;
+  color: #fc0d1d;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5vh 0 0 0;
+}
+main .button {
+  border: 2px solid #fc0d1d;
+  border-radius: 5px;
+  font-family: "Roboto", sans-serif;
+  color: #fc0d1d;
+  padding: 10px;
+  transition-duration: .25s;
+}
+main .button:hover {
+  background-color: #fc0d1d;
+  transition-duration: .25s;
+  color: white;
+  cursor: pointer;
+}
