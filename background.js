@@ -20,6 +20,17 @@
     });
   });
 
+
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  if (changeInfo) {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, { status: "reload" }, function (response) {
+        console.log(response);
+      });
+    });
+  }
+});
+
 // Receive messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
   if (request.status === "descriptionLoaded"){
