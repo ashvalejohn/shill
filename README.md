@@ -1,6 +1,8 @@
 # Shill
 Shill is a [Chrome extension](https://developer.chrome.com/extensions) that displays product information listed in the description box of a YouTube video.
 
+![Shill gif](http://res.cloudinary.com/ashvalejohn/image/upload/v1512718487/shill_r2qj2r.gif)
+
 ## Functionality & MVP
 - [ ] Chrome extension
   - [ ] [Write a manifest](https://developer.chrome.com/extensions/manifest)
