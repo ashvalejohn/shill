@@ -20,45 +20,77 @@
     });
   });
 
-// Receive message that description is loaded
+// Receive messages
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse){
   if (request.status === "descriptionLoaded"){
     console.log("Description box is loaded");
     console.log("Request links");
-    sendResponse({ status: "grabLinks" });
+    sendResponse({ status: "fetchLinks" });
   } else if (request.links){
     console.log("Received links");
-    console.log(request.links);
     sendResponse({ status: "linksReceived" });
+    fetchProductInfo(request.links);
   }
 });
 
- 
-// Send message to content_script.js to grab description links
-    // chrome.tabs.executeScript({ file: "shill.js" }, function(){
-    //   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    //     chrome.tabs.sendMessage(tabs[0].id, { status: "grabLinks" }, function (response) {
-    //       console.log(response.links);
-    //     });
-    //   });
-    // })
+function parseProductInfo(doc) {
+  console.log(doc.querySelectorAll('meta'));
+  // let metaTags = [];
+  // const meta = doc.querySelectorAll('meta');
+  // meta.forEach((tag) => {
+  //   if (tag.hasAttribute("property")) {
+  //     let props = {}
+  //     const attrs = Array.from(tag.attributes);
+  //     attrs.map((attr) => {
+  //       props[attr.name] = attr.value;
+  //     });
+  //     metaTags.push(props);
+  //   }
+}
 
 
+function checkForShortURL(url, getProductInfo) {
+  let longUrl;
+  const req = new XMLHttpRequest();
+  req.open('HEAD', `${url}`, true);
+  req.send();
+  req.done = function () {
+    if (this.readyState === this.HEADERS_RECEIVED && req.getResponseHeader("Refresh")) {
+      const refresh = req.getResponseHeader("Refresh").split("URL=");
+      const newUrl = refresh[1];
+      // console.log(`HEAD request to ${url} successful. Send GET request to ${newUrl}.`);
+      getProductInfo(newUrl);
+    } else if (req.status === 200) {
+      // console.log(`HEAD request to ${url} failed. Send GET request instead.`);
+      getProductInfo(url);
+    } else {
+      console.log(req.response);
+    }
+  }
+  return longUrl;
+}
 
-// STEP 4
-// Receive product link URLs, send xhr request for og: tags
-// chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-//   if (request.links === )
-//   port.onMessage.addListener((msg) => {
-//     console.log(`Received ${msg.urls.length} links from shill.js`);
+function getProductInfo(url, parseProductInfo){
+  const req = new XMLHttpRequest();
+  req.open('GET', `${url}`, true);
+  req.response = "document";
+  req.send();
+  req.done = function () {
+    if (req.status === 200) {
+      parseProductInfo(req.response);
+    }
+  }
+}
 
-//     msg.urls.map((url) => {
-//       const req = new XMLHttpRequest();
-//       req.open('HEAD', `${url}`, true);
-//       console.log(req);
-//       req.onload = function () {
-//         console.log(req.response;)
-//       });
-//       req.send();
-//     });
-//   });
+function fetchProductInfo(links) {
+  let productInfo = [];
+  console.log(links);
+  links.map((link) => {
+    let newUrl = checkForShortURL(link, getProductInfo);
+  });
+}
+
+
+function sendProductInfo(info){
+  // console.log(info);
+}

@@ -8,9 +8,9 @@ chrome.runtime.sendMessage({ status: "descriptionLoaded" }, function (response) 
 
 function checkStatus(){
   switch(pageStatus) {
-    case "grabLinks":
-      console.log("Calling grabLinks()");
-      grabLinks();
+    case "fetchLinks":
+      console.log("Calling fetchLinks()");
+      fetchLinks();
     case "linksReceived":
       console.log("Background received links");
     default:
@@ -18,7 +18,7 @@ function checkStatus(){
   }
 }
 
-function grabLinks(){
+function fetchLinks(){
   const desc = document.getElementById("description");
   desc.insertAdjacentHTML('afterbegin', "<div id='shill-cards'></div>");
 
@@ -35,16 +35,6 @@ function grabLinks(){
     checkStatus();
   });
 }
-
-
-
-// if (links) {
-//   console.log("shill.js grabbed links from description");
-// }
-
-// // STEP 3
-// // Send URLs to background as message
-// port.postMessage({ urls: links });
 
 // // STEP 6
 // // Receive card information
