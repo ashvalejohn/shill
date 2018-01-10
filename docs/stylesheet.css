@@ -80,3 +80,7 @@ main .button:hover {
 .cta-buttons :last-of-type {
   margin-left: 15px;
 }
+
+.blue-links{
+  color: blue;
+}
